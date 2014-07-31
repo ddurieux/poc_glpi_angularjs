@@ -17,21 +17,23 @@
             <h1>POC GLPI</h1>
         </div>
     </div>
-	<div class="container main-frame" ng-app="glping" ng-controller="mainController" ng-init="init()">
-		<div class="search-box row-fluid form-inline"></div>
+    <div class="container main-frame" ng-app="glping" ng-controller="mainController" ng-init="init()">
+	<div class="search-box row-fluid form-inline"></div>
         <div class="results-top"><h2>Computers</h2></div>
         <div class="results-container">
+            <input type="text" ng-model="searchText"/>
+            <p>Number of visible computers: {{(results|filter:searchText).length}}</p>
             <ul class="episode-list">
-<li ng-repeat="computers in results">
-    <div class="row-fluid">
-        <div class="span6">
-            <h3>Name: {{computers.name}}</h3>
-            <p>Comment: {{computers.comment}}</p>
-	    <p>Serial: {{computers.serial}}</p>
-        </div>
-    </div>
-</li>
-</ul>
+                <li ng-repeat="computers in results | filter:searchText">
+                    <div class="row-fluid">
+                        <div class="span6">
+                            <h3>Name: {{computers.name}}</h3>
+                            <p>Comment: {{computers.comment}}</p>
+                            <p>Serial: {{computers.serial}}</p>
+                        </div>
+                    </div>
+                </li>
+            </ul>
         </div>
         <div class="results-bottom"></div>
 	</div>
