@@ -1,30 +1,27 @@
-<!DOCTYPE html>
 <html>
 <head>
 	<title>Poc GLPI</title>
 	<!-- INCLUDE REQUIRED THIRD PARTY LIBRARY JAVASCRIPT AND CSS -->
 	<script type="text/javascript" src="js/angular.min.js"></script>
 	<link rel="stylesheet" href="css/bootstrap.min.css">
-
+        <link rel="stylesheet" href="css/bootstrap.no-icons.min.css">
 	<!-- INCLUDE APPLICATION SPECIFIC CSS AND JAVASCRIPT -->
-	<script type="text/javascript" src="js/glping/app.js"></script>
+        <script type="text/javascript" src="js/glping/app.js"></script>
 	<script type="text/javascript" src="js/glping/controllers/mainController.js"></script>
 	<link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    <div class='banner'>
-        <div class='container'>
-            <h1>POC GLPI</h1>
-        </div>
-    </div>
-    <div class="container main-frame" ng-app="glping" ng-controller="mainController" ng-init="init()">
+    <script type="text/javascript">
+        var sortingOrder = 'name';
+    </script>
+<!--    <div class="container main-frame" ng-app="glping" ng-controller="mainController" ng-init="init()">
 	<div class="search-box row-fluid form-inline"></div>
         <div class="results-top"><h2>Computers</h2></div>
         <div class="results-container">
             <input type="text" ng-model="searchText"/>
             <p>Number of visible computers: {{(results|filter:searchText).length}}</p>
             <ul class="episode-list">
-                <li ng-repeat="computers in results | filter:searchText">
+                <li ng-repeat="computers in results | filter:searchText"> 
                     <div class="row-fluid">
                         <div class="span6">
                             <h3>Name: {{computers.name}}</h3>
@@ -35,7 +32,53 @@
                 </li>
             </ul>
         </div>
-        <div class="results-bottom"></div>
-	</div>
+        <div class="results-bottom"></div> -->
+    <div class="container main-frame" ng-app="glping" ng-controller="mainController" ng-init="init()">
+        <div class="input-append">
+                <input type="text" ng-model="query" ng-change="search()" class="input-large search-query" placeholder="Search">
+            <span class="add-on"><i class="icon-search"></i></span>
+            </div>
+            <p>Number of computers: {{(filteredItems).length}}</p>        
+        
+            <table class="table table-striped table-condensed table-hover">
+                <thead>
+                    <tr>
+                        <th class="id">Id&nbsp;<a ng-click="sort_by('id')"><i class="icon-sort"></i></a></th>
+                        <th class="name">Name&nbsp;<a ng-click="sort_by('name')"><i class="icon-sort"></i></a></th>
+                        <th class="serial">Serial&nbsp;<a ng-click="sort_by('serial')"><i class="icon-sort"></i></a></th>
+                        <th class="lastdatemode">Last modification&nbsp;<a ng-click="sort_by('lastdatemode')"><i class="icon-sort"></i></a></th>
+                        <th class="comment">Comment&nbsp;<a ng-click="sort_by('comment')"><i class="icon-sort"></i></a></th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <td colspan="6">
+                        <div class="pagination pull-right">
+                            <ul>
+                                <li ng-class="{disabled: currentPage == 0}">
+                                    <a href ng-click="prevPage()"><< Prev</a>
+                                </li>
+                                <li ng-repeat="n in range(pagedItems.length)"
+                                    ng-class="{active: n == currentPage}"
+                                ng-click="setPage()">
+                                    <a href ng-bind="n + 1">1</a>
+                                </li>
+                                <li ng-class="{disabled: currentPage == pagedItems.length - 1}">
+                                    <a href ng-click="nextPage()">Next >></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </td>
+                </tfoot>
+                <tbody>
+                    <tr ng-repeat="item in pagedItems[currentPage] track by item.id | orderBy:sortingOrder:reverse">
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.serial}}</td>
+                        <td>{{item.date_mod}}</td>
+                        <td>{{item.comment}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 </body>
 </html>
